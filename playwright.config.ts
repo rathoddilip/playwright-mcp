@@ -19,14 +19,17 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Opt out of parallel tests on CI. Locally keep it low: the public OrangeHRM demo throttles concurrent sessions. */
+  workers: process.env.CI ? 1 : 2,
+  /* The public demo site can be slow to respond. */
+  timeout: 60_000,
+  expect: { timeout: 15_000 },
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
-    // baseURL: 'http://localhost:3000',
+    baseURL: 'https://opensource-demo.orangehrmlive.com',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
