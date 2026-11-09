@@ -13,6 +13,7 @@ export class EmployeeListPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
+    
     this.title = this.headerTitle('PIM');
     this.employeeInformationHeading = page.getByRole('heading', { name: 'Employee Information' });
     this.addEmployeeTab = page

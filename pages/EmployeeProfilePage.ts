@@ -9,7 +9,8 @@ export class EmployeeProfilePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.personalDetailsTab = page.getByRole('tab', { name: 'Personal Details' });
+    // Tabs have no accessible name of their own; the name lives on the link inside each tab.
+    this.personalDetailsTab = page.getByRole('tablist').getByRole('link', { name: 'Personal Details' });
   }
 
   /** Heading with the employee's full name, e.g. "John123 Doe456". */
