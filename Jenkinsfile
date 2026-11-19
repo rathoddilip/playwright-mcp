@@ -14,8 +14,8 @@ pipeline {
     }
 
     triggers {
-        // Check GitHub for new commits every 5 minutes.
-        pollSCM('H/5 * * * *')
+        // Check GitHub for new commits every 1 minute.
+        pollSCM('H/1 * * * *')
     }
 
     stages {
