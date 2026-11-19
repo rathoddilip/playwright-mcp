@@ -12,9 +12,9 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.heading = page.getByRole('heading', { name: 'Log' });
-    this.usernameInput = page.getByRole('textb', { name: 'Username' });
-    this.passwordInput = page.getByRole('textb', { name: 'Password' });
+    this.heading = page.getByRole('heading', { name: 'Login' });
+    this.usernameInput = page.getByRole('textbox', { name: 'Username' });
+    this.passwordInput = page.getByRole('textbox', { name: 'Password' });
     this.loginButton = page.getByRole('button', { name: 'Login' });
   }
 
