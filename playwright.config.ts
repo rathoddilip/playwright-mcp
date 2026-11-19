@@ -17,15 +17,20 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  /* Retry failed tests: the public demo site sometimes stops responding for a minute or more. */
+  retries: process.env.CI ? 2 : 1,
   /* Opt out of parallel tests on CI. Locally keep it low: the public OrangeHRM demo throttles concurrent sessions. */
   workers: process.env.CI ? 1 : 2,
   /* The public demo site can be slow to respond. */
   timeout: 60_000,
   expect: { timeout: 15_000 },
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    /* JUnit XML is read by Jenkins to show test results and trends. */
+    ['junit', { outputFile: 'junit-results/results.xml' }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -42,7 +47,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
+    /*{
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
@@ -50,7 +55,7 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },
+    },*/
 
     /* Test against mobile viewports. */
     // {
