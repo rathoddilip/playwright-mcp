@@ -51,6 +51,34 @@ pipeline {
                 allowMissing         : true
             ])
             archiveArtifacts artifacts: 'playwright-report/**, test-results/**', allowEmptyArchive: true
+
+            // Email the result after every build. Recipients come from
+            // Manage Jenkins > System > Extended E-mail Notification > Default Recipients,
+            // so the address is not stored in this public repo.
+            emailext(
+                to: '$DEFAULT_RECIPIENTS',
+                subject: 'Playwright tests: $BUILD_STATUS - $PROJECT_NAME #$BUILD_NUMBER',
+                mimeType: 'text/html',
+                attachmentsPattern: 'playwright-report/index.html',
+                body: '''
+                    <h2>Build $BUILD_STATUS: $PROJECT_NAME #$BUILD_NUMBER</h2>
+                    <p>
+                      <b>Tests:</b> ${TEST_COUNTS, var="total"} total,
+                      ${TEST_COUNTS, var="pass"} passed,
+                      ${TEST_COUNTS, var="fail"} failed,
+                      ${TEST_COUNTS, var="skip"} skipped
+                    </p>
+                    <p><b>Commit:</b> ${GIT_REVISION, length=7}</p>
+                    <p>
+                      <a href="${BUILD_URL}Playwright_20Report/">Playwright Report</a> |
+                      <a href="${BUILD_URL}testReport/">Test Results</a> |
+                      <a href="${BUILD_URL}console">Console Output</a>
+                    </p>
+                    <p>The full HTML report is attached (open index.html in a browser).</p>
+                    <h3>Failed tests</h3>
+                    ${FAILED_TESTS}
+                '''
+            )
         }
     }
 }
