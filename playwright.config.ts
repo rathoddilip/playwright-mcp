@@ -30,6 +30,8 @@ export default defineConfig({
     ['html', { open: 'never' }],
     /* JUnit XML is read by Jenkins to show test results and trends. */
     ['junit', { outputFile: 'junit-results/results.xml' }],
+    /* Allure raw results; Jenkins' Allure plugin turns them into the Allure Report. */
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {

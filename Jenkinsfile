@@ -34,6 +34,8 @@ pipeline {
 
         stage('Run Playwright tests') {
             steps {
+                // The workspace is reused between builds, so clear old Allure results first.
+                sh 'rm -rf allure-results'
                 sh 'npx playwright test'
             }
         }
@@ -51,6 +53,15 @@ pipeline {
                 allowMissing         : true
             ])
             archiveArtifacts artifacts: 'playwright-report/**, test-results/**', allowEmptyArchive: true
+
+            // Allure Report: needs the Allure Jenkins plugin and an Allure Commandline
+            // tool named 'allure' (Manage Jenkins > Tools).
+            allure(
+                commandline: 'allure',
+                includeProperties: false,
+                jdk: '',
+                results: [[path: 'allure-results']]
+            )
 
             // Email the result after every build. Recipients come from
             // Manage Jenkins > System > Extended E-mail Notification > Default Recipients,
@@ -70,6 +81,7 @@ pipeline {
                     </p>
                     <p><b>Commit:</b> ${GIT_REVISION, length=7}</p>
                     <p>
+                      <a href="${BUILD_URL}allure/">Allure Report</a> |
                       <a href="${BUILD_URL}Playwright_20Report/">Playwright Report</a> |
                       <a href="${BUILD_URL}testReport/">Test Results</a> |
                       <a href="${BUILD_URL}console">Console Output</a>

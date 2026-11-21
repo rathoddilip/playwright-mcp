@@ -10,3 +10,5 @@ node_modules/
 # Playwright MCP snapshots/logs
 /.playwright-mcp/
 /junit-results/
+/allure-results/
+/allure-report/
